@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
-import Pokedex from './pages/Pokedex/index';
-import Pokemon from './pages/Pokemon/index';
+import Pokedex from './pages/Pokedex';
+import Pokemon from './pages/Pokemon';
 
 const Stack = createStackNavigator();
 
