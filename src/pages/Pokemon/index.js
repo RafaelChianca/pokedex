@@ -30,7 +30,9 @@ export default function Pokemon({ route }) {
             api
             .get(`/pokemon/${name}/`)
             .then((response) => {
-                setPokemon(response.data);
+                if (response.data) {
+                    setPokemon(response.data);
+                }
             })
         } catch (error) {
             Alert.alert('Erro ao carregar pokemon!', error);
@@ -132,13 +134,18 @@ export default function Pokemon({ route }) {
                 )
                 : pokemon && (
                     <>
-                        <Number>#{pokemon.id}</Number>
-                        <Name>{pokemon.forms[0].name}</Name>
+                        <Number>#{pokemon.id ? pokemon.id : ''}</Number>
+                        <Name>
+                            {pokemon.forms[0] && pokemon.forms[0].name
+                                ? pokemon.forms[0].name
+                                : ''
+                            }
+                        </Name>
                         <FlatList
-                            data={pokemon.types}
+                            data={pokemon.types ? pokemon.types : []}
                             renderItem={({ item }) =>
                                 <TypeContainer backgroundColor={selectColorByType(item.type.name)}>
-                                    <Type>{item.type.name}</Type>
+                                    <Type>{item.type && item.type.name ? item.type.name : ''}</Type>
                                 </TypeContainer>
                             }
                             keyExtractor={item => item.type.name}
@@ -146,14 +153,14 @@ export default function Pokemon({ route }) {
                             numColumns={10}
                         />
                         <FlatList
-                            data={pokemon.stats}
-                            renderItem={({ item, index }) =>
+                            data={pokemon.stats ? pokemon.stats : []}
+                            renderItem={({ item }) =>
                                 <StatContainer>
-                                    <Stat>{item.stat.name}</Stat>
-                                    <Stat>{item.base_stat}</Stat>
+                                    <Stat>{item.stat && item.stat.name ? item.stat.name : '-'}</Stat>
+                                    <Stat>{item.base_stat ? item.base_stat : '0'}</Stat>
                                 </StatContainer>
                             }
-                            keyExtractor={item => item.stat.name}
+                            keyExtractor={item => item.stat && item.stat.name ? item.stat.name : Math.random()}
                             columnWrapperStyle={{flexWrap: 'wrap', paddingBottom: 10}}
                             numColumns={10}
                             scrollEnabled={false}
