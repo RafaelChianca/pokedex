@@ -6,7 +6,7 @@ export default function Pokedex() {
 
     return (
         <Container>
-            <PokemonList />
+            <PokemonList key={"pokedex"}/>
         </Container>
     );
 }
