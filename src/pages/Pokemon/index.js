@@ -12,34 +12,27 @@ import {
     Stat,
 } from './styles';
 import pokeball from '../../../assets/pokeball.png';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadPokemonRequested } from '../../store/actions/pokemon';
 
 export default function Pokemon({ route }) {
 
+    const dispatch = useDispatch();
+    const loading = useSelector(state => state.pokemon.loading);
+    const pokemonResponse = useSelector(state => state.pokemon.pokemon);
     const [pokemon, setPokemon] = useState(null);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (route && route.params && route.params.name) {
-            loadPokemon(route.params.name);
+            dispatch(loadPokemonRequested(route.params.name));
         }
     }, []);
 
-    async function loadPokemon(name) {
-        try {
-            setLoading(true);
-            api
-            .get(`/pokemon/${name}/`)
-            .then((response) => {
-                if (response.data) {
-                    setPokemon(response.data);
-                }
-            })
-        } catch (error) {
-            Alert.alert('Erro ao carregar pokemon!', error);
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        if (pokemonResponse && Object.keys(pokemonResponse).length > 0) {
+            setPokemon(pokemonResponse);
         }
-    }
+    }, [pokemonResponse]);
 
     function selectColorByMainType() {
         let type = 'none';
